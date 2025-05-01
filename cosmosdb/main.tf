@@ -1,18 +1,3 @@
-
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.0.0"
-    }
-  }
-}
-
-# Configure the Microsoft Azure Provider
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "RG" {
   name     = var.rgname
   location = var.location
@@ -25,6 +10,7 @@ resource "random_integer" "ri" {
 
 resource "azurerm_cosmosdb_account" "db" {
   name                = var.cosmosdb
+  depends_on = [ azurerm_resource_group.RG ]
   location            = var.location
   resource_group_name = var.rgname
   offer_type          = "Standard"
@@ -53,7 +39,7 @@ resource "azurerm_cosmosdb_account" "db" {
   }
 
   geo_location {
-    location          = "eastus"
+    location          = "West US"
     failover_priority = 1
   }
 
